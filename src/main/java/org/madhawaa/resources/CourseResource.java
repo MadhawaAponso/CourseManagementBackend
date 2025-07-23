@@ -1,5 +1,6 @@
 package org.madhawaa.resources;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -8,6 +9,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.madhawaa.dto.requestDTO.CourseRequestDTO;
 import org.madhawaa.dto.responseDTO.CourseResponseDTO;
+import org.madhawaa.security.UserContextService;
 import org.madhawaa.service.CourseService;
 
 import java.util.List;
@@ -19,6 +21,9 @@ public class CourseResource {
 
     @Inject
     CourseService courseService;
+
+    @Inject
+    UserContextService userContextService;
 
     @GET
     public List<CourseResponseDTO> getAllCourses() {
@@ -61,7 +66,10 @@ public class CourseResource {
 
     @GET
     @Path("/enrolled")
-    public List<CourseResponseDTO> getEnrolledCourses(@QueryParam("studentId") Integer studentId) {
+    @RolesAllowed("student")
+    public List<CourseResponseDTO> getEnrolledCourses() {
+        Integer studentId = userContextService.getUserId();
+        System.out.println(studentId);
         return courseService.getCoursesEnrolled(studentId);
     }
 

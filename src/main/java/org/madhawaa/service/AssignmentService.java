@@ -74,4 +74,14 @@ public class AssignmentService {
         if (assignment == null || !assignment.getIsActive()) throw new NotFoundException("Assignment not found");
         assignment.setIsActive(false);
     }
+    // … inside AssignmentService
+
+    public AssignmentResponseDTO getById(Integer id) {
+        Assignment assignment = assignmentRepository.findById(id);
+        if (assignment == null || !assignment.getIsActive()) {
+            throw new NotFoundException("Assignment not found");
+        }
+        return AssignmentMapper.toDTO(assignment);
+    }
+
 }

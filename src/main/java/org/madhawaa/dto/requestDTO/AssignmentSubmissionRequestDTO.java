@@ -10,8 +10,8 @@ public class AssignmentSubmissionRequestDTO {
     @NotNull
     private Integer assignmentId;
 
-    @NotNull
-    private Integer studentId;
+//    @NotNull
+//    private Integer studentId;
 
     @NotBlank
     private String submissionText;

@@ -44,26 +44,26 @@ public class AssignmentSubmissionService {
     }
 
     @Transactional
-    public AssignmentSubmissionResponseDTO submit(AssignmentSubmissionRequestDTO dto) {
-        Assignment assignment = assignmentRepository.findById(dto.getAssignmentId());
-        User student = userRepository.findById(dto.getStudentId());
+    public AssignmentSubmissionResponseDTO submit(Integer assignmentId, String submissionText, Integer studentId) {
+        Assignment assignment = assignmentRepository.findById(assignmentId);
+        User student = userRepository.findById(studentId);
 
         if (assignment == null || student == null) throw new IllegalArgumentException("Invalid IDs");
 
         AssignmentSubmission existing = submissionRepository.findByAssignmentAndStudent(
-                dto.getAssignmentId(), dto.getStudentId());
+                assignmentId, studentId);
 
         if (existing != null) {
             throw new ConflictException(
                     String.format("Student %d has already submitted assignment %d.",
-                            dto.getStudentId(), dto.getAssignmentId()));
+                            studentId, assignmentId));
         }
 
 
         AssignmentSubmission submission = new AssignmentSubmission();
         submission.setAssignment(assignment);
         submission.setStudent(student);
-        submission.setSubmissionText(dto.getSubmissionText());
+        submission.setSubmissionText(submissionText);
         submission.setSubmittedAt(Instant.now());
 
         boolean isLate = submission.getSubmittedAt().isAfter(assignment.getDueDate());

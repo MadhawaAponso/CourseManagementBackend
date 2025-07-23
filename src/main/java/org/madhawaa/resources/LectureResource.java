@@ -22,6 +22,7 @@ public class LectureResource {
     @Inject
     LectureService lectureService;
 
+    //THIS IS NOT NEEDED
     @GET
     @Path("/course/{courseId}")
     public List<LectureResponseDTO> getLecturesByCourse(@PathParam("courseId") Integer courseId) {

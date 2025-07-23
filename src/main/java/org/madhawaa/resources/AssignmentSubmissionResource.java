@@ -8,6 +8,7 @@ import jakarta.ws.rs.core.Response;
 import org.madhawaa.dto.requestDTO.AssignmentSubmissionRequestDTO;
 import org.madhawaa.dto.requestDTO.GradeSubmissionRequestDTO;
 import org.madhawaa.dto.responseDTO.AssignmentSubmissionResponseDTO;
+import org.madhawaa.security.UserContextService;
 import org.madhawaa.service.AssignmentSubmissionService;
 
 import java.util.List;
@@ -20,10 +21,13 @@ public class AssignmentSubmissionResource {
     @Inject
     AssignmentSubmissionService submissionService;
 
+    @Inject
+    UserContextService userContextService;
+
     @GET
     @Path("/assignment/{assignmentId}/my")
-    public AssignmentSubmissionResponseDTO getMySubmission(@PathParam("assignmentId") Integer assignmentId,
-                                                           @QueryParam("studentId") Integer studentId) {
+    public AssignmentSubmissionResponseDTO getMySubmission(@PathParam("assignmentId") Integer assignmentId) {
+        Integer studentId = userContextService.getUserId();
         return submissionService.getStudentSubmission(assignmentId, studentId);
     }
 
@@ -35,7 +39,8 @@ public class AssignmentSubmissionResource {
 
     @POST
     public AssignmentSubmissionResponseDTO submit(@Valid AssignmentSubmissionRequestDTO dto) {
-        return submissionService.submit(dto);
+        Integer studentId = userContextService.getUserId();
+        return submissionService.submit(dto.getAssignmentId() , dto.getSubmissionText() , studentId);
     }
 
     @PUT

@@ -48,4 +48,9 @@ public class AssignmentResource {
         assignmentService.delete(id);
         return Response.noContent().build();
     }
+    @GET
+    @Path("/{assignmentId}")
+    public AssignmentResponseDTO getById(@PathParam("assignmentId") Integer assignmentId) {
+        return assignmentService.getById(assignmentId);
+    }
 }

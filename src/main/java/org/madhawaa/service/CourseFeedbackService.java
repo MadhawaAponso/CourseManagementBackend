@@ -8,6 +8,7 @@ import org.madhawaa.dto.responseDTO.CourseFeedbackResponseDTO;
 import org.madhawaa.entity.Course;
 import org.madhawaa.entity.CourseFeedback;
 import org.madhawaa.entity.User;
+import org.madhawaa.exceptions.ConflictException;    // ⬆️ Added
 import org.madhawaa.exceptions.NotFoundException;
 import org.madhawaa.mapper.CourseFeedbackMapper;
 import org.madhawaa.repository.CourseFeedbackRepository;
@@ -20,24 +21,30 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class CourseFeedbackService {
 
-    @Inject
-    CourseFeedbackRepository feedbackRepo;
-
-    @Inject
-    CourseRepository courseRepo;
-
-    @Inject
-    UserRepository userRepo;
+    @Inject CourseFeedbackRepository feedbackRepo;
+    @Inject CourseRepository courseRepo;
+    @Inject UserRepository userRepo;
 
     public List<CourseFeedbackResponseDTO> getFeedbacksByCourse(Integer courseId) {
-        List<CourseFeedback> feedbacks = feedbackRepo.findByCourseId(courseId);
-        return feedbacks.stream()
+        return feedbackRepo.findByCourseId(courseId).stream()
                 .map(CourseFeedbackMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
+    // ⬆️ Added: retrieve the student’s own feedback
+    public CourseFeedbackResponseDTO getMyFeedback(Integer courseId, Integer studentId) {
+        return feedbackRepo.findActiveByCourseAndStudent(courseId, studentId)
+                .map(CourseFeedbackMapper::toDTO)
+                .orElseThrow(() -> new NotFoundException("No feedback found for this student"));
+    }
+
     @Transactional
     public void submitFeedback(Integer courseId, Integer studentId, CourseFeedbackRequestDTO dto) {
+        // ⬇️ Modified: prevent duplicate
+        if (feedbackRepo.findActiveByCourseAndStudent(courseId, studentId).isPresent()) {
+            throw new ConflictException("Feedback already submitted by this student");
+        }
+
         Course course = courseRepo.findByIdOptional(courseId)
                 .orElseThrow(() -> new NotFoundException("Course not found"));
         User student = userRepo.findByIdOptional(studentId)
