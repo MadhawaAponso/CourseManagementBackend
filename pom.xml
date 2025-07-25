@@ -47,6 +47,11 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-smallrye-graphql-client</artifactId>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.quarkus</groupId>-->
+<!--            <artifactId>quarkus-resteasy-multipart</artifactId>-->
+<!--        </dependency>-->
+
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-hibernate-orm-panache</artifactId>
