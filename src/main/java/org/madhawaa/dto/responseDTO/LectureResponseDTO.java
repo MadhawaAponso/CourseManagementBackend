@@ -17,6 +17,7 @@ public class LectureResponseDTO {
     private String onlineLectureLink;
     private Integer weekNumber;
     private LocalDateTime scheduledDate;
+    private Integer courseId;
 
     // THINGS WE ARE GETTING FROM OTHER ENTITES
     private String instructorName;

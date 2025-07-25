@@ -14,6 +14,7 @@ public class AssignmentResponseDTO {
     private String createdBy;
     private String lectureTitle;
     private Instant createdAt;
+    private Integer lectureId;
 
     // Getters and setters...
 }

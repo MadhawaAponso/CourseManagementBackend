@@ -122,9 +122,16 @@ public class CourseService {
                 .collect(Collectors.toList());
     }
 
-    public List<CourseResponseDTO> getAvailableCourses(Integer studentId) {
-        return courseRepository.findAvailableForStudent(studentId).stream()
-                .map(CourseMapper::toDTO)
-                .collect(Collectors.toList());
-    }
+//    public List<CourseResponseDTO> getAvailableCourses(Integer studentId) {
+//        return courseRepository.findAvailableForStudent(studentId).stream()
+//                .map(CourseMapper::toDTO)
+//                .collect(Collectors.toList());
+//    }
+public List<CourseResponseDTO> getAvailableCourses(Integer studentId) {
+    return courseRepository.findAvailableForStudent(studentId)
+            .stream()
+            .map(CourseMapper::toDTO)
+            .collect(Collectors.toList());
+}
+
 }

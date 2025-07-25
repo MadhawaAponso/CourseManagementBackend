@@ -15,6 +15,32 @@ public class AssignmentRepository implements PanacheRepositoryBase<Assignment , 
         return find("lecture.id = ?1 AND isActive = true ORDER BY dueDate", lectureId).list();
     }
 
+//    public List<Assignment> findUpcomingForStudent(Integer studentId, Instant now) {
+//        return getEntityManager().createQuery(
+//                        """
+//                        SELECT a
+//                          FROM Assignment a
+//                          JOIN a.lecture l
+//                          JOIN l.course c
+//                          JOIN c.enrollments e
+//                          LEFT JOIN AssignmentSubmission s
+//                            ON s.assignment = a
+//                           AND s.student.id  = :studentId
+//                        WHERE e.student.id  = :studentId
+//                          AND a.dueDate     > :now
+//                          AND a.isActive    = TRUE
+//                          AND e.status      = 'active'
+//                          AND (s.id IS NULL OR s.status = 'returned')
+//                        ORDER BY a.dueDate
+//                        """,
+//                        Assignment.class
+//                )
+//                .setParameter("studentId", studentId)
+//                .setParameter("now", now)
+//                .getResultList();
+//    }
+
+
     public List<Assignment> findUpcomingForStudent(Integer studentId, Instant now) {
         return getEntityManager().createQuery("""
             SELECT a FROM Assignment a

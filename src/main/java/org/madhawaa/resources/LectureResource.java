@@ -10,6 +10,7 @@ import jakarta.ws.rs.core.Response;
 
 import org.madhawaa.dto.requestDTO.LectureRequestDTO;
 import org.madhawaa.dto.responseDTO.LectureResponseDTO;
+import org.madhawaa.security.UserContextService;
 import org.madhawaa.service.LectureService;
 
 import java.util.List;
@@ -21,6 +22,8 @@ public class LectureResource {
 
     @Inject
     LectureService lectureService;
+    @Inject
+    UserContextService userContextService;
 
     //THIS IS NOT NEEDED
     @GET
@@ -62,7 +65,8 @@ public class LectureResource {
 
     @GET
     @Path("/week/current/student")
-    public List<LectureResponseDTO> getCurrentWeekForStudent(@QueryParam("studentId") Integer studentId) {
+    public List<LectureResponseDTO> getCurrentWeekForStudent() {
+        Integer studentId = userContextService.getUserId();
         return lectureService.getCurrentWeekForStudent(studentId);
     }
 

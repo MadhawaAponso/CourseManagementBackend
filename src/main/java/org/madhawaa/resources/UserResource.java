@@ -48,15 +48,13 @@ public class UserResource {
     }
     @GET
     @Path("/me")
-    @RolesAllowed({"student", "instructor", "admin"})
-    public Response getCurrentUser() {
+    @RolesAllowed({"student","instructor","admin"})
+    public UserResponseDTO getCurrentUser() {
         Integer userId = userContextService.getUserId();
         if (userId == null) {
-            return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid token").build();
+            throw new NotAuthorizedException("Missing or invalid token");
         }
-
-        UserResponseDTO user = userService.getById(userId);
-        return Response.ok(user).build();
+        return userService.getById(userId);
     }
 
 

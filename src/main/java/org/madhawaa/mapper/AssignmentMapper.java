@@ -19,7 +19,6 @@ public class AssignmentMapper {
         assignment.setIsActive(true);
         return assignment;
     }
-
     public static AssignmentResponseDTO toDTO(Assignment assignment) {
         AssignmentResponseDTO dto = new AssignmentResponseDTO();
         dto.setId(assignment.getId());
@@ -30,13 +29,39 @@ public class AssignmentMapper {
         dto.setCreatedAt(assignment.getCreatedAt());
 
         if (assignment.getCreatedBy() != null) {
-            dto.setCreatedBy(assignment.getCreatedBy().getFirstName() + " " + assignment.getCreatedBy().getLastName());
+            dto.setCreatedBy(
+                    assignment.getCreatedBy().getFirstName() + " " +
+                            assignment.getCreatedBy().getLastName()
+            );
         }
 
         if (assignment.getLecture() != null) {
             dto.setLectureTitle(assignment.getLecture().getLectureTitle());
+            dto.setLectureId(assignment.getLecture().getId());
+            System.out.println(assignment.getLecture().getId());// ← add this
         }
 
         return dto;
     }
+
+
+//    public static AssignmentResponseDTO toDTO(Assignment assignment) {
+//        AssignmentResponseDTO dto = new AssignmentResponseDTO();
+//        dto.setId(assignment.getId());
+//        dto.setAssignmentTitle(assignment.getAssignmentTitle());
+//        dto.setDescription(assignment.getDescription());
+//        dto.setDueDate(assignment.getDueDate());
+//        dto.setMaxScore(assignment.getMaxScore());
+//        dto.setCreatedAt(assignment.getCreatedAt());
+//
+//        if (assignment.getCreatedBy() != null) {
+//            dto.setCreatedBy(assignment.getCreatedBy().getFirstName() + " " + assignment.getCreatedBy().getLastName());
+//        }
+//
+//        if (assignment.getLecture() != null) {
+//            dto.setLectureTitle(assignment.getLecture().getLectureTitle());
+//        }
+//
+//        return dto;
+//    }
 }

@@ -9,6 +9,8 @@ import org.madhawaa.dto.requestDTO.EnrollmentRequestDTO;
 import org.madhawaa.dto.responseDTO.CourseResponseDTO;
 import org.madhawaa.dto.responseDTO.EnrollmentResponseDTO;
 import org.madhawaa.entity.Course;
+import org.madhawaa.security.UserContextService;
+import org.madhawaa.service.CourseService;
 import org.madhawaa.service.EnrollmentService;
 
 import java.util.List;
@@ -20,6 +22,10 @@ public class EnrollmentResource {
 
     @Inject
     EnrollmentService enrollmentService;
+    @Inject
+    UserContextService userContextService;
+    @Inject
+    CourseService courseService;
 
     @GET
     @Path("/student/me")
@@ -29,8 +35,10 @@ public class EnrollmentResource {
 
     @GET
     @Path("/available")
-    public List<CourseResponseDTO> getAvailableCourses(@QueryParam("studentId") Integer studentId) {
-        return enrollmentService.getAvailableCourses(studentId);
+    public List<CourseResponseDTO> getAvailableCourses( ) {
+        Integer studentId = userContextService.getUserId();
+//        return enrollmentService.getAvailableCourses(studentId);
+        return courseService.getAvailableCourses(studentId);
     }
 
     @POST

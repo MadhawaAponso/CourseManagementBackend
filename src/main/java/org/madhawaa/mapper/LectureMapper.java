@@ -17,11 +17,17 @@ public class LectureMapper {
         dto.setOnlineLectureLink(lecture.getOnlineLectureLink());
         dto.setScheduledDate(lecture.getScheduledDate());
         dto.setWeekNumber(lecture.getWeekNumber());
+        // in your LectureMapper (wherever you build the DTO)
+//        dto.setCourseId(course.getCourse().getId());
+
 
         Course course = lecture.getCourse();
         if (course != null) {
             dto.setCourseCode(course.getCourseCode());
             dto.setCourseName(course.getCourseName());
+            // in your LectureMapper (wherever you build the DTO)
+            dto.setCourseId(course.getId());
+
 
             User instructor = course.getInstructor();
             if (instructor != null) {

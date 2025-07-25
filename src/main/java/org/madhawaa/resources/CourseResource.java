@@ -58,9 +58,12 @@ public class CourseResource {
         courseService.delete(courseId);
         return Response.noContent().build();
     }
+
+
     @GET
     @Path("/instructor")
-    public List<CourseResponseDTO> getInstructorCourses(@QueryParam("instructorId") Integer instructorId) {
+    public List<CourseResponseDTO> getInstructorCourses() {
+        Integer instructorId = userContextService.getUserId();
         return courseService.getCoursesByInstructor(instructorId);
     }
 
@@ -75,7 +78,8 @@ public class CourseResource {
 
     @GET
     @Path("/available")
-    public List<CourseResponseDTO> getAvailableCourses(@QueryParam("studentId") Integer studentId) {
+    public List<CourseResponseDTO> getAvailableCourses() {
+        Integer studentId = userContextService.getUserId();
         return courseService.getAvailableCourses(studentId);
     }
 }

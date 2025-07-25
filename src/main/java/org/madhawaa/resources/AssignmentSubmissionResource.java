@@ -1,5 +1,6 @@
 package org.madhawaa.resources;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -25,6 +26,7 @@ public class AssignmentSubmissionResource {
     UserContextService userContextService;
 
     @GET
+    @RolesAllowed("student")
     @Path("/assignment/{assignmentId}/my")
     public AssignmentSubmissionResponseDTO getMySubmission(@PathParam("assignmentId") Integer assignmentId) {
         Integer studentId = userContextService.getUserId();
@@ -38,6 +40,7 @@ public class AssignmentSubmissionResource {
     }
 
     @POST
+    @RolesAllowed("student")
     public AssignmentSubmissionResponseDTO submit(@Valid AssignmentSubmissionRequestDTO dto) {
         Integer studentId = userContextService.getUserId();
         return submissionService.submit(dto.getAssignmentId() , dto.getSubmissionText() , studentId);

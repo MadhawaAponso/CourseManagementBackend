@@ -16,7 +16,7 @@ import org.madhawaa.repository.CourseNoteRepository;
 import org.madhawaa.repository.CourseRepository;
 import org.madhawaa.repository.LectureRepository;
 
-import java.time.LocalDate;
+import java.time.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -94,15 +94,33 @@ public class LectureService {
         lecture.setIsActive(false);
     }
 
-    public List<LectureResponseDTO> getCurrentWeekForStudent(Integer studentId) {
-        LocalDate today = LocalDate.now();
-        LocalDate start = today.with(java.time.DayOfWeek.MONDAY);
-        LocalDate end = today.with(java.time.DayOfWeek.SUNDAY);
+//    public List<LectureResponseDTO> getCurrentWeekForStudent(Integer studentId) {
+//        LocalDate today = LocalDate.now();
+//        LocalDate start = today.with(java.time.DayOfWeek.MONDAY);
+//        LocalDate end = today.with(java.time.DayOfWeek.SUNDAY);
+//
+//        return lectureRepository.findCurrentWeekForStudent(studentId, start, end).stream()
+//                .map(LectureMapper::toDTO)
+//                .collect(Collectors.toList());
+//    }
+public List<LectureResponseDTO> getCurrentWeekForStudent(Integer studentId) {
+    LocalDate today       = LocalDate.now();
+    LocalDate startOfWeek = today.with(DayOfWeek.MONDAY);
+    LocalDate endOfWeek   = today.with(DayOfWeek.SUNDAY);
 
-        return lectureRepository.findCurrentWeekForStudent(studentId, start, end).stream()
-                .map(LectureMapper::toDTO)
-                .collect(Collectors.toList());
-    }
+    // define the window
+    LocalDateTime now          = LocalDateTime.now();
+    LocalDateTime weekStart    = startOfWeek.atStartOfDay();
+    LocalDateTime weekEnd      = endOfWeek.atTime(LocalTime.MAX);
+
+    return lectureRepository
+            .findCurrentWeekForStudentBetween(studentId, weekStart, weekEnd)
+            .stream()
+            // only keep those still in the future
+            .filter(l -> l.getScheduledDate().isAfter(now))
+            .map(LectureMapper::toDTO)
+            .collect(Collectors.toList());
+}
 
     public List<LectureResponseDTO> getCurrentWeekForInstructor(Integer instructorId) {
         LocalDate today = LocalDate.now();
